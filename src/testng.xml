@@ -1,0 +1,9 @@
+<suite name="seleniumcn.com.test">    
+    <test name="test_seleniumcn" >
+        <classes>
+            <class name="com.selenium.test.NewTestNG_SUC"/>
+            <class name="com.selenium.test.NewTestNG_Fail"/>
+            <class name="com.selenium.test.TestNGReport"/>          
+        </classes>
+    </test>  
+</suite>

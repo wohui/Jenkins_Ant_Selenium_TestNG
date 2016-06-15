@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="auto" default="runtest" basedir=".">
+<property name="base.dir" value="."/>
+<!--项目根目录,生成文件目录，jar包存放路径-->
+	<property name="testng.output.dir" value="${base.dir}/test-output"/>
+	<property name="lib.dir" value="${base.dir}/libs"/>
+	<property name="testng.file" value="testng.xml"/>
+  	<taskdef resource="testngtasks" classpath="${lib.dir}/testng-6.8.5.jar"/>
+    <!-- 定义clean单元 -->
+    <target name="clean">
+    <!--删除bin和testng-output目录 -->
+    <delete dir="${base.dir}/bin"/>
+    <delete dir="${base.dir}/testng.output.dir"/>
+    </target>
+    <!-- 定义compile党员，执行编译过程，依赖clean 编译src下文件，编译后存放在bin目录 -->
+	<target name="compile" depends="clean">
+	<mkdir dir="${base.dir}/bin"/>
+	<javac
+	srcdir="${base.dir}/src"
+	encoding="UTF-8"
+	destdir="${base.dir}/bin"
+	classpathref="classes"
+	includeantruntime="off"
+	debug="on"
+	debuglevel="lines,vars,source"/>
+	</target>
+	<!-- 定义编译需要的jar包文件 -->
+	<path id="classes">
+	<fileset dir="${lib.dir}" includes="*.jar"/>
+	<fileset dir="${lib.dir}" includes="*.zip"/>
+	<pathelement location="${base.dir}/bin"/>
+	</path>
+	<!-- 定义runtest单元，依赖compile,运行testng -->
+	<target name="runtest" depends="compile">
+		<testng 		 
+		classpathref="classes"		
+		useDefaultListeners="false"
+		listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter"
+		delegateCommandSystemProperties="true">
+		<!-- 解决报告乱码问题 -->
+		<jvmarg value="-Dfile.encoding=UTF-8"/>
+		<!-- 定义要执行的testng文件 -->
+		<xmlfileset dir="${base.dir}/src" includes="${testng.file}"/>
+		<!-- 设置生成报告的title -->
+		<sysproperty key="org.uncommons.reportng.title" value="TestNG测试报告-svn1"/>
+		</testng>
+	</target>
+</project>
